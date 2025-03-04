@@ -1,4 +1,20 @@
+# Core Dependencies
 streamlit
 google-generativeai
 requests
 python-dotenv
+
+# LangChain (For AI Processing)
+langchain
+langchain-google-genai
+
+# Data Processing
+pandas
+numpy
+
+# Map Visualization
+folium
+streamlit-folium
+
+# Date & Time Handling
+datetime
