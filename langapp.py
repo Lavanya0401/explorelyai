@@ -28,11 +28,15 @@ def get_travel_recommendation(source, destination, travel_date):
     """
     try:
         response = model.generate_content(prompt)
-        return response.text if hasattr(response, "text") else "No recommendation available."
+        if hasattr(response, "candidates") and response.candidates:
+            return response.candidates[0].content
+        return "No recommendation available."
+    except genai.types.GoogleAPICallError as e:
+        return f"⚠️ API Error: {str(e)}"
     except Exception as e:
         return f"⚠️ Error fetching travel recommendations: {str(e)}"
 
-st.set_page_config(page_title="Explorely AI🧳  - Travel Planner", layout="wide")
+st.set_page_config(page_title="Explorely AI🧳 - Travel Planner", layout="wide")
 
 # Custom Styling
 st.markdown(
@@ -81,8 +85,8 @@ if st.button("🎒   Get Travel Options"):
         with st.spinner("Fetching the best travel options... 🚀"):
             travel_recommendation = get_travel_recommendation(source, destination, travel_date)
         
-        if "Error" in travel_recommendation:
+        if travel_recommendation.startswith("⚠️"):
             st.error(travel_recommendation)  # Display AI error
         else:
             st.subheader("🔮 AI-Generated Travel Recommendations")
-            st.write(travel_recommendation)  # Use write instead of markdown
+            st.markdown(f"<div class='travel-option'>{travel_recommendation}</div>", unsafe_allow_html=True)
