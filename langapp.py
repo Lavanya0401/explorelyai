@@ -29,7 +29,7 @@ def get_travel_recommendation(source, destination, travel_date):
     try:
         response = model.generate_content(prompt)
         if hasattr(response, "candidates") and response.candidates:
-            return response.candidates[0].content
+            return str(response.candidates[0].content)  # Ensure response is a string
         return "No recommendation available."
     except genai.types.GoogleAPICallError as e:
         return f"⚠️ API Error: {str(e)}"
